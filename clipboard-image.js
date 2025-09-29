@@ -70,7 +70,7 @@ function _pasteBlob(blob) {
   reader.onload = async function () {
 
     const filename = "pasted_image_" + Date.now() + ".png";
-    const file = new File([blob], filename, {type: blob.type});
+    const file = new File([blob], filename, { type: blob.type });
     const targetFolder = game.settings.get('clipboard-image', 'image-location');
     const path = (await FilePicker.upload(_clipboardGetSource(), targetFolder, file, {})).path;
 
@@ -115,24 +115,24 @@ document.addEventListener("keydown", event => {
   CLIPBOARD_HIDDEN_MODE = (event.ctrlKey || event.metaKey) && event.getModifierState('CapsLock');
 });
 
-Hooks.once('init', function() {
+Hooks.once('init', function () {
   if (navigator.clipboard?.read) {
     game.keybindings.register("clipboard-image", "paste-image", {
       name: "Paste Image from Clipboard",
       restricted: true,
       uneditable: [
-        {key: "KeyV", modifiers: [ KeyboardManager.MODIFIER_KEYS.CONTROL ]}
+        { key: "KeyV", modifiers: [KeyboardManager.MODIFIER_KEYS.CONTROL] }
       ],
       onDown: () => {
         let succeeded = false;
-        if (canvas.activeLayer._copy.length) {
-          console.warn("Image Clipboard: Priority given to Foundry copied objects.");
-          return succeeded;
-        }
+        // if (canvas.activeLayer._copy.length) {
+        //   console.warn("Image Clipboard: Priority given to Foundry copied objects.");
+        //   return succeeded;
+        // }
         if (CLIPBOARD_IMAGE_LOCKED) return succeeded;
         if (game.modules.get('vtta-tokenizer')?.active &&
-            Object.values(ui.windows).filter(w => w.id === 'tokenizer-control').length)
-              return succeeded;
+          Object.values(ui.windows).filter(w => w.id === 'tokenizer-control').length)
+          return succeeded;
         _extractFromClipboard().then((clipItems) => {
           if (clipItems?.length) {
             _clipboardCreateFolderIfMissing(game.settings.get('clipboard-image', 'image-location')).then(() => {
@@ -163,7 +163,7 @@ Hooks.once('init', function() {
 
 });
 
-Hooks.once('ready', function() {
+Hooks.once('ready', function () {
   if (game.user.isGM && !navigator.clipboard?.read) {
     ui.notifications.warn("Clipboard Image: Disabled - Your browser does not support clipboard functions. Please check the console");
     console.warn("Clipboard Image was not initialized. Either this hostname is missing certificates or if you are on Firefox: I need dom.events.asyncClipboard.read and dom.events.testing.asyncClipboard browser functions enabled. Or try with any Chromium based browser");
