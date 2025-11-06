@@ -125,10 +125,10 @@ Hooks.once('init', function () {
       ],
       onDown: () => {
         let succeeded = false;
-        // if (canvas.activeLayer._copy.length) {
-        //   console.warn("Image Clipboard: Priority given to Foundry copied objects.");
-        //   return succeeded;
-        // }
+        if (canvas.activeLayer.clipboard.objects.length) {
+          console.warn("Image Clipboard: Priority given to Foundry copied objects.");
+          return succeeded;
+        }
         if (CLIPBOARD_IMAGE_LOCKED) return succeeded;
         if (game.modules.get('vtta-tokenizer')?.active &&
           Object.values(ui.windows).filter(w => w.id === 'tokenizer-control').length)
